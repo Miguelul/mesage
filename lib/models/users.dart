@@ -6,9 +6,12 @@ import 'dart:core';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
+import 'mensaje.dart';
+
 class User {
   String? id;
   String? plan;
+  List<Mensaje>? mensaje;
   List<CronoCaloriaDia?>? cronoCaloriaDia;
   List<CronoDiaWork?>? cronoDiaWork;
   List<CronoAgua?>? cronoAgua;
@@ -29,10 +32,7 @@ class User {
   String? img;
   double? masaCorpo;
   int? nivelActiv;
-  double? peso;
-  String? objetivo;
-  double? altura;
-  double? icm;
+
   User(
       {this.id,
       this.cronoCaloriaDia,
@@ -50,20 +50,17 @@ class User {
       this.img,
       this.masaCorpo,
       this.nivelActiv,
-      this.peso,
       this.cronoCaloriaDiaM,
       this.cronoDiaWorkM,
       this.cronoAguaM,
       this.cronoPesoM,
       this.gender,
-      this.objetivo,
-      this.altura,
-      this.icm,
       this.plan});
 
   User copyWith({
     String? id,
     String? plan,
+    List<Mensaje>? mensaje,
     List<CronoCaloriaDia?>? cronoCaloriaDia,
     List<CronoDiaWork?>? cronoDiaWork,
     List<CronoAgua?>? cronoAgua,
@@ -108,16 +105,11 @@ class User {
       img: img ?? this.img,
       masaCorpo: masaCorpo ?? this.masaCorpo,
       nivelActiv: nivelActiv ?? this.nivelActiv,
-      peso: peso ?? this.peso,
-      objetivo: objetivo ?? this.objetivo,
-      altura: altura ?? this.altura,
-      icm: icm ?? this.icm,
     );
   }
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-     
         id: json['id'],
         diasWork: json['dias_work'],
         edad: json['edad'],
@@ -127,9 +119,7 @@ class User {
         img: json['img'],
         masaCorpo: json['masa_corpo'],
         nivelActiv: json['nivel_activ'],
-        peso: json['peso'].toDouble(),
         gender: json["gender"],
-        objetivo: json["objetivo"],
         plan: json["plan"]);
   }
 
@@ -183,21 +173,11 @@ class User {
         "img": img,
         "masa_corpo": masaCorpo,
         "nivel_activ": nivelActiv,
-        "peso": peso,
         "gender": gender,
-        "objetivo": objetivo,
-        "altura": altura,
-        "icm": icm,
         "plan": plan,
       };
 
   Map<String, dynamic> toJson1() => {
-        "crono_caloria_dia":
-            cronoCaloriaDiaS != null ? mapaCalo(cronoCaloriaDiaS) : [],
-        "crono_dia_work":
-            cronoDiaWorkS != null ? mapaDiaWork(cronoDiaWorkS) : [],
-        "cron_agua": cronoAguaS != null ? mapaAgua(cronoAguaS) : [],
-        "crono_peso": cronoPeso != null ? mapaPeso(cronoPeso) : [],
         "id": id,
         "dias_work": diasWork,
         "edad": edad,
@@ -207,35 +187,9 @@ class User {
         "img": img,
         "masa_corpo": masaCorpo,
         "nivel_activ": nivelActiv,
-        "peso": peso,
         "gender": gender,
-        "objetivo": objetivo,
-        "altura": altura,
-        "icm": icm,
         "plan": plan,
       };
-}
-
-Map<String, CronoCaloriaDia> mapaCalo(List<CronoCaloriaDia?>? lista) {
-  Map<String, CronoCaloriaDia> mapa = {
-    for (var item in lista!) (item)!.id!: item
-  };
-  return mapa;
-}
-
-Map<String, CronoAgua> mapaAgua(List<CronoAgua?>? lista) {
-  Map<String, CronoAgua> mapa = {for (var item in lista!) (item)!.id!: item};
-  return mapa;
-}
-
-Map<String, CronoDiaWork> mapaDiaWork(List<CronoDiaWork?>? lista) {
-  Map<String, CronoDiaWork> mapa = {for (var item in lista!) (item)!.id!: item};
-  return mapa;
-}
-
-Map<String, CronoPeso> mapaPeso(List<CronoPeso?>? lista) {
-  Map<String, CronoPeso> mapa = {for (var item in lista!) (item)!.id!: item};
-  return mapa;
 }
 
 class CronoCaloriaDia {
@@ -306,173 +260,6 @@ class CronoDiaWork {
       };
 }
 
-List<CronoCaloriaDia> getObjectsAfterLastSunday(
-    Map<String, dynamic> dataMap, bool select) {
-  if (dataMap.isNotEmpty) {
-    late List<CronoCaloriaDia> objectsAfterLastSundayCal = [];
-    final List<String> keys = dataMap.keys.toList();
-    final DateFormat formatter = DateFormat('dd/MM/yyyy');
 
-    DateTime now = DateTime.now();
 
-    DateTime lastSunday = now.subtract(Duration(days: now.weekday));
 
-    DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-    DateTime lastSundayFormatted =
-        formatter.parse(dateFormat.format(lastSunday));
-
-    if (select) {
-      lastSundayFormatted =
-          lastSundayFormatted.subtract(const Duration(days: 28));
-    }
-
-    bool foundLastSunday = false;
-    objectsAfterLastSundayCal.clear();
-
-    for (int i = keys.length - 1; i >= 0; i--) {
-      final DateTime recordDate = formatter.parse(dataMap[keys[i]]['fecha']);
-
-      if (lastSundayFormatted.isBefore(recordDate)) {
-        final CronoCaloriaDia object = CronoCaloriaDia(
-            id: keys[i],
-            total: dataMap[keys[i]]['total'],
-            fecha: dataMap[keys[i]]['fecha']);
-        objectsAfterLastSundayCal.add(object);
-        foundLastSunday = true;
-      }
-      if (foundLastSunday) {}
-    }
-
-    objectsAfterLastSundayCal = objectsAfterLastSundayCal.reversed.toList();
-
-    return objectsAfterLastSundayCal;
-  } else {
-    return [CronoCaloriaDia(fecha: "01/01/2001", total: 10)];
-  }
-}
-
-List<CronoAgua> getObjectsAgua(Map<String, dynamic> dataMap, bool select) {
-  if (dataMap.isNotEmpty) {
-    late List<CronoAgua> objectsAfterLastSundayCal = [];
-    final List<String> keys = dataMap.keys.toList();
-    final DateFormat formatter = DateFormat('dd/MM/yyyy');
-
-    DateTime now = DateTime.now();
-
-    DateTime lastSunday = now.subtract(Duration(days: now.weekday));
-
-    DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-    DateTime lastSundayFormatted =
-        formatter.parse(dateFormat.format(lastSunday));
-    if (select) {
-      lastSundayFormatted =
-          lastSundayFormatted.subtract(const Duration(days: 28));
-    }
-    bool foundLastSunday = false;
-    objectsAfterLastSundayCal.clear();
-
-    for (int i = keys.length - 1; i >= 0; i--) {
-      final DateTime recordDate = formatter.parse(dataMap[keys[i]]['fecha']);
-
-      if (lastSundayFormatted.isBefore(recordDate)) {
-        final CronoAgua object = CronoAgua(
-            id: keys[i],
-            total: dataMap[keys[i]]['total'],
-            fecha: dataMap[keys[i]]['fecha']);
-
-        objectsAfterLastSundayCal.add(object);
-        foundLastSunday = true;
-      }
-      if (foundLastSunday) {}
-    }
-
-    objectsAfterLastSundayCal = objectsAfterLastSundayCal.reversed.toList();
-
-    return objectsAfterLastSundayCal;
-  } else {
-    return [CronoAgua(fecha: "01/01/2001", total: 10)];
-  }
-}
-
-List<CronoPeso> getPeso(Map<String, dynamic> dataMap) {
-  if (dataMap.isNotEmpty) {
-    late List<CronoPeso> objectsAfterLastSundayCal = [];
-    final List<String> keys = dataMap.keys.toList();
-    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm:ss');
-
-    DateTime now = DateTime.now();
-
-    DateTime lastSunday = now.subtract(Duration(days: now.weekday));
-
-    DateFormat dateFormat = DateFormat('dd/MM/yyyy HH:mm:ss');
-    DateTime lastSundayFormatted =
-        formatter.parse(dateFormat.format(lastSunday));
-    lastSundayFormatted =
-        lastSundayFormatted.subtract(const Duration(days: 28));
-
-    bool foundLastSunday = false;
-    objectsAfterLastSundayCal.clear();
-
-    for (int i = keys.length - 1; i >= 0; i--) {
-      final DateTime recordDate = formatter.parse(dataMap[keys[i]]['fecha']);
-
-      if (lastSundayFormatted.isBefore(recordDate)) {
-        final CronoPeso object = CronoPeso(
-            id: keys[i],
-            total: dataMap[keys[i]]['total'],
-            fecha: dataMap[keys[i]]['fecha']);
-
-        objectsAfterLastSundayCal.add(object);
-        foundLastSunday = true;
-      }
-      if (foundLastSunday) {}
-    }
-
-    objectsAfterLastSundayCal = objectsAfterLastSundayCal.reversed.toList();
-
-    return objectsAfterLastSundayCal;
-  } else {
-    return [CronoPeso(fecha: "01/01/2001 15:30:45", total: 10)];
-  }
-}
-
-List<CronoDiaWork> getObjectsAfterLastSundayWork(
-    Map<String, dynamic> dataMap, bool select) {
-  late List<CronoDiaWork> objectsAfterLastSunday = [];
-  if (dataMap.isNotEmpty) {
-    final List<String> keys = dataMap.keys.toList();
-    final DateFormat formatter = DateFormat('dd/MM/yyyy');
-    DateTime now = DateTime.now();
-
-    DateTime lastSunday = now.subtract(Duration(days: now.weekday));
-
-    DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-    DateTime lastSundayFormatted =
-        formatter.parse(dateFormat.format(lastSunday));
-    if (select) {
-      lastSundayFormatted =
-          lastSundayFormatted.subtract(const Duration(days: 28));
-    }
-
-    bool foundLastSunday = false;
-    objectsAfterLastSunday.clear();
-
-    for (int i = keys.length - 1; i >= 0; i--) {
-      final DateTime recordDate = formatter.parse(dataMap[keys[i]]['fecha']);
-      if (lastSundayFormatted.isBefore(recordDate)) {
-        final CronoDiaWork object = CronoDiaWork(
-            id: keys[i].toString(),
-            estado: dataMap[keys[i]]['estado'],
-            fecha: dataMap[keys[i]]['fecha']);
-        objectsAfterLastSunday.add(object);
-
-        foundLastSunday = true;
-      }
-      if (foundLastSunday) {}
-    }
-    objectsAfterLastSunday = objectsAfterLastSunday.reversed.toList();
-    return objectsAfterLastSunday;
-  } else {
-    return [CronoDiaWork(estado: false, fecha: "01/01/2001")];
-  }
-}

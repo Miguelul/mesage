@@ -242,15 +242,12 @@ decoration: InputDecorations.authInputDecoration(
                                     fecha: "01/01/2001 12:00:00", total: 01)
                               },
                               gender: userdata.tempUser.gender,
-                              objetivo: userdata.tempUser.objetivo,
-                              peso: userdata.tempUser.peso,
-                              altura: userdata.tempUser.altura,
-                              icm: userdata.tempUser.icm,
+                           
                               nivelActiv: userdata.tempUser.nivelActiv,
                               fullName: myController.text,
                               edad: int.parse(myController2.text),
                               fechaNaci: myController3.text,
-                              plan: userdata.tempUser.objetivo=="Gain weight"?"plan1":userdata.tempUser.objetivo=="Weigh lose"?"plan2":"plan3",
+
                               img: "");
                               
 
