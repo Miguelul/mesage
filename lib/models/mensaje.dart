@@ -1,44 +1,47 @@
 
-
-
-
 class Mensaje {
-    String contenido;
-    String fecha;
-    String id;
-    String urlImage;
+  String? fecha;
+  String? id;
+  String? contenido;
+  String? idUsuario;
+  String? urlImagen;
 
-    Mensaje({
-        required this.contenido,
-        required this.fecha,
-        required this.id,
-        required this.urlImage,
-    });
+  Mensaje({
+    this.fecha,
+    this.id,
+    this.contenido,
+    this.idUsuario,
+    this.urlImagen,
+  });
 
-    Mensaje copyWith({
-        String? contenido,
-        String? fecha,
-        String? id,
-        String? urlImage,
-    }) => 
-        Mensaje(
-            contenido: contenido ?? this.contenido,
-            fecha: fecha ?? this.fecha,
-            id: id ?? this.id,
-            urlImage: urlImage ?? this.urlImage,
-        );
+  Mensaje copyWith({
+    String? fecha,
+    String? id,
+    String? contenido,
+    String? idUsuario,
+    String? urlImagen,
+  }) =>
+      Mensaje(
+        fecha: fecha ?? this.fecha,
+        id: id ?? this.id,
+        contenido: contenido ?? this.contenido,
+        idUsuario: idUsuario ?? this.idUsuario,
+        urlImagen: urlImagen ?? this.urlImagen,
+      );
 
-    factory Mensaje.fromJson(Map<String, dynamic> json) => Mensaje(
-        contenido: json["contenido"],
-        fecha: json["fecha"],
-        id: json["id"],
-        urlImage: json["urlImage"],
-    );
+  factory Mensaje.fromJson(Map<String, dynamic> json) => Mensaje(
+        fecha: json["fecha"] ?? "fecha",
+        id: json["id"] ?? "id",
+        contenido: json["Contenido"] ?? "Contenido",
+        idUsuario: json["Id_Usuario"] ?? "user",
+        urlImagen: json["URL_Imagen"] ?? "img",
+      );
 
-    Map<String, dynamic> toJson() => {
-        "contenido": contenido,
+  Map<String, dynamic> toJson() => {
         "fecha": fecha,
         "id": id,
-        "urlImage": urlImage,
-    };
+        "Contenido": contenido,
+        "Id_Usuario": idUsuario,
+        "URL_Imagen": urlImagen,
+      };
 }

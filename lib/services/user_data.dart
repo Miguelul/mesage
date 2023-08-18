@@ -34,7 +34,9 @@ class UsersData extends ChangeNotifier {
       final url = Uri.https(_baseUrl, "gymtesis/data/users/$idA.json");
       
       final response = await http.get(url);
+
       if (response.statusCode == 200) {
+
         final Map<String, dynamic> usersMap = json.decode(response.body);
         users.clear();
 
@@ -62,7 +64,7 @@ class UsersData extends ChangeNotifier {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final String? userId = responseData['name'];
-      user.id = userId;
+      user.id = userId!;
       users.add(user);
       notifyListeners();
 
@@ -96,7 +98,7 @@ class UsersData extends ChangeNotifier {
 
     final url =
         Uri.https(_baseUrl, "gymtesis/data/users/$id/${users[0].id}.json");
-    final response = await http.put(url, body: json.encode(user.toJson1()));
+    final response = await http.put(url, body: json.encode(user.toJson()));
     if (response.statusCode == 200) {
       final index = users.indexWhere((element) => element.id == user.id);
       if (index != -1) {
@@ -120,238 +122,6 @@ class UsersData extends ChangeNotifier {
     }
   }
 
-  Future<CronoCaloriaDia> createDiaCronCal(CronoCaloriaDia cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/crono_caloria_dia.json");
 
-    final response = await http.post(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final String? userId = responseData['name'];
-      cronCal.id = userId;
-      users[0].cronoCaloriaDia!.add(cronCal);
-      users[0].cronoCaloriaDiaS!.add(cronCal);
-      notifyListeners();
 
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma caloria');
-    }
-  }
-
-  Future<CronoDiaWork> createDiaWork(CronoDiaWork cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(
-        _baseUrl, "gymtesis/data/users/$id/${users[0].id}/crono_dia_work.json");
-
-    final response = await http.post(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final String? userId = responseData['name'];
-      cronCal.id = userId;
-      users[0].cronoDiaWork!.add(cronCal);
-      users[0].cronoDiaWorkS!.add(cronCal);
-      notifyListeners();
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma Dia trabajado');
-    }
-  }
-
-  Future<CronoAgua> createAguaCron(CronoAgua cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(
-        _baseUrl, "gymtesis/data/users/$id/${users[0].id}/cron_agua.json");
-
-    final response = await http.post(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final String? userId = responseData['name'];
-      cronCal.id = userId;
-
-      users[0].cronoAgua!.add(cronCal);
-      users[0].cronoAguaS!.add(cronCal);
-      notifyListeners();
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma caloria');
-    }
-  }
-
-  Future<CronoPeso> createPesoCron(CronoPeso cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(
-        _baseUrl, "gymtesis/data/users/$id/${users[0].id}/crono_peso.json");
-
-    final response = await http.post(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final String? userId = responseData['name'];
-      cronCal.id = userId;
-      users[0].cronoPeso!.add(cronCal);
-      notifyListeners();
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma peso');
-    }
-  }
-
-  Future<CronoAgua> upDateAguaCron(CronoAgua cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/cron_agua/${cronCal.id}.json");
-
-    final response = await http.put(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final index = users[0]
-          .cronoAgua!
-          .indexWhere((element) => element!.id == cronCal.id);
-      final index2 = users[0]
-          .cronoAguaS!
-          .indexWhere((element) => element!.id == cronCal.id);
-      if (index != -1) {
-        users[0].cronoAgua![index] = cronCal;
-        users[0].cronoAguaS![index2] = cronCal;
-        notifyListeners();
-      }
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma caloria');
-    }
-  }
-
-  Future<CronoDiaWork> upDateDiaWork(CronoDiaWork cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/crono_dia_work/${cronCal.id}.json");
-
-    final response = await http.put(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final index = users[0]
-          .cronoDiaWork!
-          .indexWhere((element) => element!.id == cronCal.id);
-      final index2 = users[0]
-          .cronoDiaWorkS!
-          .indexWhere((element) => element!.id == cronCal.id);
-      if (index != -1) {
-        users[0].cronoDiaWork![index] = cronCal;
-        users[0].cronoDiaWorkS![index2] = cronCal;
-
-        notifyListeners();
-      }
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma caloria');
-    }
-  }
-
-  Future<CronoCaloriaDia> upDateDiaCron(CronoCaloriaDia cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/crono_caloria_dia/${cronCal.id}.json");
-
-    final response = await http.put(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final index = users[0]
-          .cronoCaloriaDia!
-          .indexWhere((element) => element!.id == cronCal.id);
-      final index2 = users[0]
-          .cronoCaloriaDiaS!
-          .indexWhere((element) => element!.id == cronCal.id);
-      if (index != -1) {
-        users[0].cronoCaloriaDia![index] = cronCal;
-        users[0].cronoCaloriaDiaS![index2] = cronCal;
-        notifyListeners();
-      }
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to create dia cronograma caloria');
-    }
-  }
-
-  Future<CronoPeso> upDatePeso(CronoPeso cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/crono_peso/${cronCal.id}.json");
-
-    final response = await http.put(url, body: json.encode(cronCal.toJson()));
-    if (response.statusCode == 200) {
-      final index = users[0]
-          .cronoPeso!
-          .indexWhere((element) => element!.id == cronCal.id);
-
-      if (index != -1) {
-        users[0].cronoPeso![index] = cronCal;
-        notifyListeners();
-      }
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to UpDate dia cronograma Peso');
-    }
-  }
-
-  Future<CronoPeso> deletePeso(CronoPeso cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/crono_peso/${cronCal.id}.json");
-
-    final response =
-        await http.delete(url);
-    if (response.statusCode == 200) {
-      users[0].cronoPeso!.removeWhere((element) => element!.id == cronCal.id);
-      notifyListeners();
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to UpDate dia cronograma Peso');
-    }
-  }
-
-  Future<CronoCaloriaDia> deleteCaloria(CronoCaloriaDia cronCal) async {
-    String id = await readTokenE();
-    final url = Uri.https(_baseUrl,
-        "gymtesis/data/users/$id/${users[0].id}/crono_caloria_dia/${cronCal.id}.json");
-    final response = await http.delete(url);
-    if (response.statusCode == 200) {
-      users[0]
-          .cronoCaloriaDia!
-          .removeWhere((element) => element!.id == cronCal.id);
-      users[0]
-          .cronoCaloriaDiaS!
-          .removeWhere((element) => element!.id == cronCal.id);
-      notifyListeners();
-
-      return cronCal;
-    } else {
-      throw Exception('Failed to UpDate dia cronograma Caloria');
-    }
-  }
-
-  // Future<User> updateCroCalo(User user) async {
-  //   String id = await readTokenE();
-
-  //   final indexC =
-  //       user.cronoCaloriaDia!.indexWhere((element) => element!.id == user.id);
-  //   final url = Uri.https(_baseUrl,
-  //       "gymtesis/data/users/$id/${user.id}/${user.cronoCaloriaDia![indexC]!.id}.json");
-  //   final response = await http.put(url, body: json.encode(user.toJson()));
-  //   if (response.statusCode == 200) {
-  //     final index = users.indexWhere((element) => element.id == user.id);
-  //     if (index != -1) {
-  //       users[index] = user;
-  //       notifyListeners();
-  //     }
-  //     return user;
-  //   } else {
-  //     throw Exception('Failed to update user');
-  //   }
-  // }
 }

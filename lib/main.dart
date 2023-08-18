@@ -4,14 +4,13 @@ import 'package:gymtesis/screens/home/home_tab.dart';
 import 'package:gymtesis/screens/home/home_widget/check_auth_screen.dart';
 import 'package:gymtesis/services/auth_service.dart';
 import 'package:gymtesis/services/notifications_service.dart';
-import 'package:gymtesis/services/plan_data.dart';
 
 import 'package:provider/provider.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'constanst.dart';
-import 'screens/home/home_widget/video/video.dart';
+import 'services/mesaje.dart';
 import 'services/user_data.dart';
 // import 'package:device_preview/device_preview.dart';
 
@@ -23,17 +22,14 @@ void main() async {
     // builder: (context) =>
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthService(),
-          child: const StepperDemo(),
-        ),
+   
         ChangeNotifierProvider(
           create: (_) => UsersData(),
           lazy: false,
         ),
         // ChangeNotifierProvider(create: (_) => HomeController()),
-        ChangeNotifierProvider(create: (_) => PlanData()),
-      
+       ChangeNotifierProvider(create: (_) => AuthService()),
+       ChangeNotifierProvider(create: (_) => MensajeService()),
       ],
       child: const MyApp(),
     ),

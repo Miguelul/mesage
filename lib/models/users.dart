@@ -1,265 +1,116 @@
 // To parse this JSON data, do
 //
-//     final userr = userrFromJson(jsonString);
-
+//     final user = userFromJson(jsonString);
 import 'dart:core';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
+import 'dart:convert';
+
 import 'mensaje.dart';
 
+User userFromJson(String str) => User.fromJson(json.decode(str));
+
+String userToJson(User data) => json.encode(data.toJson());
+
 class User {
+  String? nombre;
+  String? apellido;
   String? id;
-  String? plan;
-  List<Mensaje>? mensaje;
-  List<CronoCaloriaDia?>? cronoCaloriaDia;
-  List<CronoDiaWork?>? cronoDiaWork;
-  List<CronoAgua?>? cronoAgua;
-  List<CronoCaloriaDia?>? cronoCaloriaDiaS;
-  List<CronoDiaWork?>? cronoDiaWorkS;
-  List<CronoAgua?>? cronoAguaS;
-  List<CronoPeso?>? cronoPeso;
-  Map<String, CronoCaloriaDia?>? cronoCaloriaDiaM;
-  Map<String, CronoDiaWork?>? cronoDiaWorkM;
-  Map<String, CronoAgua?>? cronoAguaM;
-  Map<String, CronoPeso?>? cronoPesoM;
-  int? diasWork;
+  String? ubicacion;
+  Map<String, Mensaje>? mensaje;
+  List<Mensaje>? mensajeList;
+  String? estadoCuenta;
+  String? urlImagen;
   String? gender;
-  int? edad;
-  String? fechaNaci;
-  String? fullName;
-  String? horaRutina;
-  String? img;
-  double? masaCorpo;
-  int? nivelActiv;
 
   User(
-      {this.id,
-      this.cronoCaloriaDia,
-      this.cronoDiaWork,
-      this.cronoAgua,
-      this.cronoCaloriaDiaS,
-      this.cronoDiaWorkS,
-      this.cronoAguaS,
-      this.cronoPeso,
-      this.diasWork,
-      this.edad,
-      this.fechaNaci,
-      this.fullName,
-      this.horaRutina,
-      this.img,
-      this.masaCorpo,
-      this.nivelActiv,
-      this.cronoCaloriaDiaM,
-      this.cronoDiaWorkM,
-      this.cronoAguaM,
-      this.cronoPesoM,
+      {this.nombre,
+      this.apellido,
+      this.id,
+      this.ubicacion,
+      this.mensaje,
+      this.estadoCuenta,
+      this.urlImagen,
       this.gender,
-      this.plan});
+      this.mensajeList});
 
-  User copyWith({
-    String? id,
-    String? plan,
-    List<Mensaje>? mensaje,
-    List<CronoCaloriaDia?>? cronoCaloriaDia,
-    List<CronoDiaWork?>? cronoDiaWork,
-    List<CronoAgua?>? cronoAgua,
-    List<CronoCaloriaDia?>? cronoCaloriaDiaS,
-    List<CronoDiaWork?>? cronoDiaWorkS,
-    List<CronoAgua?>? cronoAguaS,
-    List<CronoPeso?>? cronoPeso,
-    Map<String, CronoCaloriaDia?>? cronoCaloriaDiaM,
-    Map<String, CronoDiaWork?>? cronoDiaWorkM,
-    Map<String, CronoAgua?>? cronoAguaM,
-    Map<String, CronoPeso?>? cronoPesoM,
-    int? diasWork,
-    String? gender,
-    int? edad,
-    String? fechaNaci,
-    String? fullName,
-    String? horaRutina,
-    String? img,
-    double? masaCorpo,
-    int? nivelActiv,
-    double? peso,
-    String? objetivo,
-    double? altura,
-    double? icm,
-  }) {
-    return User(
-      id: id ?? this.id,
-      plan: plan ?? this.plan,
-      cronoCaloriaDia: cronoCaloriaDia ?? this.cronoCaloriaDia,
-      cronoDiaWork: cronoDiaWork ?? this.cronoDiaWork,
-      cronoAgua: cronoAgua ?? this.cronoAgua,
-      cronoCaloriaDiaS: cronoCaloriaDiaS ?? this.cronoCaloriaDiaS,
-      cronoDiaWorkS: cronoDiaWorkS ?? this.cronoDiaWorkS,
-      cronoAguaS: cronoAguaS ?? this.cronoAguaS,
-      cronoPeso: cronoPeso ?? this.cronoPeso,
-      diasWork: diasWork ?? this.diasWork,
-      gender: gender ?? this.gender,
-      edad: edad ?? this.edad,
-      fechaNaci: fechaNaci ?? this.fechaNaci,
-      fullName: fullName ?? this.fullName,
-      horaRutina: horaRutina ?? this.horaRutina,
-      img: img ?? this.img,
-      masaCorpo: masaCorpo ?? this.masaCorpo,
-      nivelActiv: nivelActiv ?? this.nivelActiv,
-    );
-  }
+  User copyWith(
+          {String? nombre,
+          String? apellido,
+          String? id,
+          String? ubicacion,
+          Map<String, Mensaje>? mensaje,
+          List<Mensaje>? mensajeList,
+          String? estadoCuenta,
+          String? urlImagen,
+          String? gender}) =>
+      User(
+          nombre: nombre ?? this.nombre,
+          apellido: apellido ?? this.apellido,
+          id: id ?? this.id,
+          ubicacion: ubicacion ?? this.ubicacion,
+          mensaje: mensaje ?? this.mensaje,
+          estadoCuenta: estadoCuenta ?? this.estadoCuenta,
+          urlImagen: urlImagen ?? this.urlImagen,
+          gender: gender ?? this.gender,
+          mensajeList: mensajeList ?? this.mensajeList);
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        id: json['id'],
-        diasWork: json['dias_work'],
-        edad: json['edad'],
-        fechaNaci: json['fecha_naci'],
-        fullName: json['full_name'],
-        horaRutina: json['hora_rutina'],
-        img: json['img'],
-        masaCorpo: json['masa_corpo'],
-        nivelActiv: json['nivel_activ'],
-        gender: json["gender"],
-        plan: json["plan"]);
-  }
+  factory User.fromJson(Map<String, dynamic> json) => User(
+      nombre: json["Nombre"],
+      apellido: json["Apellido"],
+      id: json["id"],
+      ubicacion: json["Ubicacion"],
+      mensajeList:
+          json["mensaje"] != null ? getMensa(json["mensaje"], false) : [],
+      mensaje: json["mensaje"] != null
+          ? Map.from(json["mensaje"])
+              .map((k, v) => MapEntry<String, Mensaje>(k, Mensaje.fromJson(v)))
+          : null,
+      estadoCuenta: json["EstadoCuenta"],
+      urlImagen: json["URL_Imagen"],
+      gender: json["gender"]);
 
   Map<String, dynamic> toJson() => {
-        "crono_caloria_dia": cronoCaloriaDiaM != null
-            ? Map<String, dynamic>.from(
-                cronoCaloriaDiaM!.map(
-                  (key, value) => MapEntry<String, dynamic>(
-                    key,
-                    value?.toJson(),
-                  ),
-                ),
-              )
-            : null,
-        "crono_dia_work": cronoDiaWorkM != null
-            ? Map<String, dynamic>.from(
-                cronoDiaWorkM!.map(
-                  (key, value) => MapEntry<String, dynamic>(
-                    key,
-                    value?.toJson(),
-                  ),
-                ),
-              )
-            : null,
-        "cron_agua": cronoAguaM != null
-            ? Map<String, dynamic>.from(
-                cronoAguaM!.map(
-                  (key, value) => MapEntry<String, dynamic>(
-                    key,
-                    value?.toJson(),
-                  ),
-                ),
-              )
-            : null,
-        "crono_peso": cronoPesoM != null
-            ? Map<String, dynamic>.from(
-                cronoPesoM!.map(
-                  (key, value) => MapEntry<String, dynamic>(
-                    key,
-                    value?.toJson(),
-                  ),
-                ),
-              )
-            : null,
+        "Nombre": nombre,
+        "Apellido": apellido,
         "id": id,
-        "dias_work": diasWork,
-        "edad": edad,
-        "fecha_naci": fechaNaci,
-        "full_name": fullName,
-        "hora_rutina": horaRutina,
-        "img": img,
-        "masa_corpo": masaCorpo,
-        "nivel_activ": nivelActiv,
-        "gender": gender,
-        "plan": plan,
-      };
-
-  Map<String, dynamic> toJson1() => {
-        "id": id,
-        "dias_work": diasWork,
-        "edad": edad,
-        "fecha_naci": fechaNaci,
-        "full_name": fullName,
-        "hora_rutina": horaRutina,
-        "img": img,
-        "masa_corpo": masaCorpo,
-        "nivel_activ": nivelActiv,
-        "gender": gender,
-        "plan": plan,
+        "Ubicacion": ubicacion,
+        "mensaje": Map.from(mensaje!)
+            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "EstadoCuenta": estadoCuenta,
+        "URL_Imagen": urlImagen,
+        "gender": gender
       };
 }
 
-class CronoCaloriaDia {
-  int total;
-  String fecha;
-  String? id;
+List<Mensaje> getMensa(Map<String, dynamic> dataMap, bool select) {
+  if (dataMap.isNotEmpty) {
+    late List<Mensaje> objectsAfterLastSundayCal = [];
+    final List<String> keys = dataMap.keys.toList();
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
 
-  CronoCaloriaDia({required this.total, required this.fecha, this.id});
+    DateTime now = DateTime.now();
 
-  factory CronoCaloriaDia.fromJson(Map<String, dynamic> json) {
-    return CronoCaloriaDia(
-        total: json["total"] ?? 100, fecha: json["fecha"] ?? "01/01/2001");
+    bool foundLastSunday = false;
+    objectsAfterLastSundayCal.clear();
+
+    for (int i = keys.length - 1; i >= 0; i--) {
+      final DateTime recordDate = formatter.parse(dataMap[keys[i]]['fecha']);
+
+      final Mensaje object = Mensaje(
+          id: keys[i],
+          contenido: dataMap[keys[i]]['Contenido'],
+          urlImagen: dataMap[keys[i]]['URL_Imagen'],
+          fecha: dataMap[keys[i]]['fecha']);
+      objectsAfterLastSundayCal.add(object);
+      foundLastSunday = true;
+    }
+
+    objectsAfterLastSundayCal = objectsAfterLastSundayCal.reversed.toList();
+
+    return objectsAfterLastSundayCal;
+  } else {
+    return [Mensaje(fecha: "01/01/2001", contenido: "", id: "", urlImagen: "")];
   }
-
-  Map<String, dynamic> toJson() => {"total": total, "fecha": fecha};
 }
-
-class CronoAgua {
-  int total;
-  String fecha;
-  String? id;
-
-  CronoAgua({required this.total, required this.fecha, this.id});
-
-  factory CronoAgua.fromJson(Map<String, dynamic> json) {
-    return CronoAgua(
-        total: json["total"] ?? 100, fecha: json["fecha"] ?? "01/01/2001");
-  }
-
-  Map<String, dynamic> toJson() => {"id": id, "total": total, "fecha": fecha};
-}
-
-class CronoPeso {
-  double total;
-  String fecha;
-  String? id;
-
-  CronoPeso({required this.total, required this.fecha, this.id});
-
-  factory CronoPeso.fromJson(Map<String, dynamic> json) {
-    return CronoPeso(
-        total: json["total"] ?? 100, fecha: json["fecha"] ?? "01/01/2001");
-  }
-
-  Map<String, dynamic> toJson() => {"id": id, "total": total, "fecha": fecha};
-}
-
-class CronoDiaWork {
-  bool estado;
-  String fecha;
-  String? id;
-
-  CronoDiaWork({
-    required this.estado,
-    required this.fecha,
-    this.id,
-  });
-
-  factory CronoDiaWork.fromJson(Map<String, dynamic> json) {
-    return CronoDiaWork(
-      estado: json["estado"] ?? false,
-      fecha: json["fecha"] ?? "01/01/2001",
-    );
-  }
-  Map<String, dynamic> toJson() => {
-        "estado": estado,
-        "fecha": fecha,
-      };
-}
-
-
-
-

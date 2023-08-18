@@ -225,30 +225,9 @@ decoration: InputDecorations.authInputDecoration(
                             ),
                           );
                           userdata.tempUser = User(
-                              cronoCaloriaDiaM: {
-                                "dia0": CronoCaloriaDia(
-                                    fecha: "01/01/2001", total: 01)
-                              },
-                              cronoDiaWorkM: {
-                                "dia0": CronoDiaWork(
-                                    estado: false, fecha: "01/01/2001")
-                              },
-                              cronoAguaM: {
-                                 "dia0": CronoAgua(
-                                    fecha: "01/01/2001", total: 01)
-                              },
-                                cronoPesoM: {
-                                 "dia0": CronoPeso(
-                                    fecha: "01/01/2001 12:00:00", total: 01)
-                              },
-                              gender: userdata.tempUser.gender,
-                           
-                              nivelActiv: userdata.tempUser.nivelActiv,
-                              fullName: myController.text,
-                              edad: int.parse(myController2.text),
-                              fechaNaci: myController3.text,
-
-                              img: "");
+                            nombre: myController.text,
+                            apellido: myController2.text
+                         );
                               
 
                           final id = await authService.readToken();

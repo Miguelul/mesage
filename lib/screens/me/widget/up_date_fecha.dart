@@ -148,32 +148,6 @@ class _UpDateFechaState extends State<UpDateFecha> {
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                 onPressed: () async {
                   tempUser = userdata.users[0].copyWith(
-                    fechaNaci: myController3.text,
-                    cronoCaloriaDiaS:
-                        userdata.users[0].cronoCaloriaDiaS!.isEmpty
-                            ? [
-                                CronoCaloriaDia(
-                                    fecha: "01/01/2001", total: 01, id: "dia0")
-                              ]
-                            : userdata.users[0].cronoCaloriaDiaS!,
-                    cronoDiaWorkS: userdata.users[0].cronoDiaWorkS!.isEmpty
-                        ? [
-                            CronoDiaWork(
-                                estado: false, fecha: "01/01/2001", id: "dia0")
-                          ]
-                        : userdata.users[0].cronoDiaWorkS!,
-                    cronoAguaS: userdata.users[0].cronoAguaS!.isEmpty
-                        ? [
-                            CronoAgua(
-                                fecha: "01/01/2001", total: 01, id: "dia0")
-                          ]
-                        : userdata.users[0].cronoAguaS!,
-                    cronoPeso: userdata.users[0].cronoPeso!.isEmpty
-                        ? [
-                            CronoPeso(
-                                fecha: "01/01/2001", total: 01, id: "dia0")
-                          ]
-                        : userdata.users[0].cronoPeso!,
                   );
 
                   await userdata.updateUser(tempUser);

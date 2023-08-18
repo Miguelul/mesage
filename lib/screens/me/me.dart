@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import '../../constanst.dart';
 import '../../services/auth_service.dart';
-import '../../services/plan_data.dart';
 import '../../services/user_data.dart';
 import '../home/home_page.dart';
 import 'widget/circulavator.dart';
@@ -74,7 +73,7 @@ class MePage extends StatelessWidget {
                           const CircularAbata(),
                           InfoConte(
                             label: 'Nombre',
-                            labelImpu: userdata.users[0].fullName!,
+                            labelImpu: userdata.users[0].nombre!,
                             miFuncion: () {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
@@ -84,7 +83,7 @@ class MePage extends StatelessWidget {
                                       opacity: animation1,
                                       child: UpDate(
                                           fullName:
-                                              userdata.users[0].fullName!),
+                                              userdata.users[0].nombre!),
                                     );
                                   },
                                 ),
@@ -94,7 +93,7 @@ class MePage extends StatelessWidget {
                           ),
                           InfoConte(
                             label: 'Edad',
-                            labelImpu: userdata.users[0].edad.toString(),
+                            labelImpu: userdata.users[0].apellido.toString(),
                             miFuncion: () {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
@@ -103,7 +102,7 @@ class MePage extends StatelessWidget {
                                     return FadeTransition(
                                       opacity: animation1,
                                       child: UpDateEdad(
-                                          fullName: userdata.users[0].edad!),
+                                          fullName: userdata.users[0].apellido!),
                                     );
                                   },
                                 ),
@@ -113,7 +112,7 @@ class MePage extends StatelessWidget {
                           ),
                           InfoConte(
                             label: 'Fecha de nacimiento ',
-                            labelImpu: userdata.users[0].fechaNaci!,
+                            labelImpu: userdata.users[0].ubicacion!,
                             miFuncion: () {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
@@ -123,7 +122,7 @@ class MePage extends StatelessWidget {
                                       opacity: animation1,
                                       child: UpDateFecha(
                                           fullName:
-                                              userdata.users[0].fechaNaci!),
+                                              userdata.users[0].ubicacion!),
                                     );
                                   },
                                 ),
@@ -207,7 +206,6 @@ class MePage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final userdata = Provider.of<UsersData>(context);
-     final plandata = Provider.of<PlanData>(context);
     if (userdata.isLoading) {
       return const LoadingScreen();
     }
@@ -258,7 +256,7 @@ class MePage1 extends StatelessWidget {
                           const CircularAbata(),
                           InfoConte1(
                            label: "s",
-                            labelImpu: userdata.users[0].fullName!,
+                            labelImpu: userdata.users[0].nombre!,
                             miFuncion: () {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
@@ -268,7 +266,7 @@ class MePage1 extends StatelessWidget {
                                       opacity: animation1,
                                       child: UpDate2(
                                           fullName:
-                                              userdata.users[0].fullName!),
+                                              userdata.users[0].nombre!),
                                     );
                                   },
                                 ),
@@ -278,7 +276,7 @@ class MePage1 extends StatelessWidget {
                           ),
                        
                       Text("Mi post",style: TextStyle(fontSize: 18),),
-                     CardPost(userdata: userdata, plandata: plandata),
+                     CardPost(mensajes: userdata.users[0].mensajeList!,),
                           const SizedBox(
                             height: 20,
                           )

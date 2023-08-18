@@ -3,14 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gymtesis/constanst.dart';
 import 'package:gymtesis/models/users.dart';
-import 'package:gymtesis/screens/home/home_widget/chart.dart';
-import 'package:gymtesis/screens/home/home_widget/plans.dart';
 import 'package:gymtesis/screens/loading_screen.dart';
-import 'package:gymtesis/services/plan_data.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../UI/video.dart';
+import '../../models/mensaje.dart';
 import '../../services/user_data.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,45 +29,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final userdata = Provider.of<UsersData>(context);
-    final plandata = Provider.of<PlanData>(context);
 
-    void creaUpdaAgua(int op) async {
-      isVisible = false;
-      DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-      DateTime now = DateTime.now();
-
-      int cont = 0;
-      bool existe = false;
-
-      while (cont < userdata.users[0].cronoAgua!.length) {
-        DateTime date =
-            dateFormat.parse(userdata.users[0].cronoAgua![cont]!.fecha);
-        existe = date.weekday == now.weekday;
-        if (existe == true) {
-          break;
-        }
-        cont++;
-      }
-
-      CronoAgua tempCrDiCa =
-          CronoAgua(total: op, fecha: dateFormat.format(now));
-      if (!existe) {
-        await userdata.createAguaCron(tempCrDiCa);
-      } else {
-        tempCrDiCa = CronoAgua(
-            id: userdata.users[0].cronoAgua![cont]!.id,
-            total: op,
-            fecha: dateFormat.format(now));
-        await userdata.upDateAguaCron(tempCrDiCa);
-      }
-    }
-    
     if (cont == 0) {
       userdata.load();
       if (userdata.isLoading) {
         return const LoadingScreen();
       }
-      plandata.loadPlan(userdata.users[0].plan!);
     }
 
     cont = cont + 1;
@@ -107,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 33, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    userdata.users[0].fullName!,
+                    userdata.users[0].nombre!,
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w100,
@@ -116,9 +80,9 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 30,
                   ),
-                  CardPost(userdata: userdata, plandata: plandata),
-                  CardPost(userdata: userdata, plandata: plandata),
-                  CardPost(userdata: userdata, plandata: plandata),
+                  // CardPost(),
+                  // CardPost(),
+                  // CardPost(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -206,96 +170,110 @@ class _HomePageState extends State<HomePage> {
 class CardPost extends StatelessWidget {
   const CardPost({
     super.key,
-    required this.userdata,
-    required this.plandata,
+    required this.mensajes,
   });
 
-  final UsersData userdata;
-  final PlanData plandata;
+  final List<Mensaje> mensajes;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Center(
-                    child: CircleAvatar(
-                        radius: 60,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: userdata.users[0].img != ""
-                                ? Image.network(
-                                    userdata.users[0].img!,
-                                    fit: BoxFit.cover)
-                                : Image.asset(
-                                    "assets/img/R (5).jpg",
-                                    fit: BoxFit.cover),
-                          ),
-                        )),
-                  )),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                userdata.users[0].fullName!,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w100,
-                    color: Color.fromARGB(255, 0, 0, 0)),
-              ),
-              const Spacer(),
-              const Icon(Icons.more_horiz),
-              const SizedBox(
-                width: 10,
-              )
-            ],
-          ),
-          // Row(
-          //   children: [
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width - 70,
+    final userdata = Provider.of<UsersData>(context);
+    print(userdata.users[0].mensajeList!.length);
+    return SizedBox(
+      height: 480 *
+          (userdata.users[0].mensajeList != null
+              ? userdata.users[0].mensajeList!.length * 1
+              : 1),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: userdata.users[0].mensajeList != null
+            ? userdata.users[0].mensajeList!.length
+            : 0,
+        itemBuilder: (context, index) => SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
-              children: <Widget>[
-                Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: 
-                               plandata.plan != null? Image.network(plandata.plan.img): const SizedBox()),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                            plandata.plan.diasWork![0].descripcion,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black54),
-                          ),
-                        )
-                      ],
-                    ))
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Center(
+                          child: CircleAvatar(
+                              radius: 60,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: userdata.users[0].urlImagen != ""
+                                      ? Image.network(
+                                          userdata.users[0].urlImagen!,
+                                          fit: BoxFit.cover)
+                                      : Image.asset("assets/img/R (5).jpg",
+                                          fit: BoxFit.cover),
+                                ),
+                              )),
+                        )),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      userdata.users[0].nombre!,
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w100,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.more_horiz),
+                    const SizedBox(
+                      width: 10,
+                    )
+                  ],
+                ),
+                // Row(
+                //   children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 70,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Column(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: mensajes.isNotEmpty
+                                      ? Image.network(
+                                          mensajes[index].urlImagen!)
+                                      : const SizedBox()),
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Text(
+                                  mensajes[index].contenido!,
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.black54),
+                                ),
+                              )
+                            ],
+                          ))
+                    ],
+                  ),
+                ),
+                // ],
+                // ),
               ],
             ),
           ),
-          // ],
-          // ),
-        ],
+        ),
       ),
     );
   }
@@ -349,8 +327,8 @@ class AppBarGYM extends StatelessWidget implements PreferredSizeWidget {
                     child: SizedBox(
                       width: 40,
                       height: 40,
-                      child: userdata.users[0].img != ""
-                          ? Image.network(userdata.users[0].img!,
+                      child: userdata.users[0].urlImagen != ""
+                          ? Image.network(userdata.users[0].urlImagen!,
                               fit: BoxFit.cover)
                           : Image.asset("assets/img/R (5).jpg",
                               fit: BoxFit.cover),

@@ -38,7 +38,7 @@ class _CircularAbataState extends State<CircularAbata> {
                   height: 120,
                   child: _image != null
                       ? Image.file(_image!, fit: BoxFit.cover)
-                      : userdata.users[0].img !=""? Image.network(userdata.users[0].img!,fit: BoxFit.cover):Image.asset("assets/img/R (5).jpg",fit: BoxFit.cover),
+                      : userdata.users[0].urlImagen !=""? Image.network(userdata.users[0].urlImagen!,fit: BoxFit.cover):Image.asset("assets/img/R (5).jpg",fit: BoxFit.cover),
                 )),
               ),
             )),
@@ -82,6 +82,7 @@ class _CircularAbataState extends State<CircularAbata> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(50)),
                     child: const Icon(CupertinoIcons.camera_fill))))
+    
       ]),
     );
   }

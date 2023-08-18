@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class UpDateEdad extends StatefulWidget {
-  int fullName;
+  String fullName;
   UpDateEdad({
     required
     this.fullName ,super.key});
@@ -138,32 +138,7 @@ class _UpDateEdadState extends State<UpDateEdad> {
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                 onPressed: () async {
                   tempUser = userdata.users[0].copyWith(
-                    edad:int.parse( myController3.text),
-                    cronoCaloriaDiaS:
-                        userdata.users[0].cronoCaloriaDiaS!.isEmpty
-                            ? [
-                                CronoCaloriaDia(
-                                    fecha: "01/01/2001", total: 01, id: "dia0")
-                              ]
-                            : userdata.users[0].cronoCaloriaDiaS!,
-                    cronoDiaWorkS: userdata.users[0].cronoDiaWorkS!.isEmpty
-                        ? [
-                            CronoDiaWork(
-                                estado: false, fecha: "01/01/2001", id: "dia0")
-                          ]
-                        : userdata.users[0].cronoDiaWorkS!,
-                    cronoAguaS: userdata.users[0].cronoAguaS!.isEmpty
-                        ? [
-                            CronoAgua(
-                                fecha: "01/01/2001", total: 01, id: "dia0")
-                          ]
-                        : userdata.users[0].cronoAguaS!,
-                    cronoPeso: userdata.users[0].cronoPeso!.isEmpty
-                        ? [
-                            CronoPeso(
-                                fecha: "01/01/2001", total: 01, id: "dia0")
-                          ]
-                        : userdata.users[0].cronoPeso!,
+                 
                   );
 
                   await userdata.updateUser(tempUser);
